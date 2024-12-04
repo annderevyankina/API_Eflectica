@@ -8,11 +8,17 @@
 import SwiftUI
 
 struct CollectionView: View {
-    @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false 
-
     var body: some View {
-        Text("Hello, World!")
-            .padding()
+        VStack {
+            Text("Your Collections")
+                .font(.title)
+                .padding()
 
+            List {
+                Text("Collection 1")
+                Text("Collection 2")
+            }
+        }
+        .navigationBarTitle("Коллекции", displayMode: .inline)
     }
 }
