@@ -9,52 +9,61 @@ import Foundation
 import SwiftUI
 
 struct MainTabView: View {
-    @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false  // Храним состояние авторизации
+    @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false
+    @State private var selectedTab = 0
 
     var body: some View {
-        Button(action: {
-            // Сбрасываем статус авторизации
-            isLoggedIn = false
-        }) {
-            Text("Выйти")
-                .foregroundColor(.blue)
-                .padding()
-                .background(Color.white)
-                .cornerRadius(10)
-                .shadow(radius: 5)
+        NavigationView {
+            ZStack {
+                TabView(selection: $selectedTab) {
+                    QuestionsView()
+                        .tabItem {
+                            Image(selectedTab == 0 ? "questIconActive" : "questIcon")
+                        }
+                        .tag(0)
+
+                    CardListView()
+                        .tabItem {
+                            Image(selectedTab == 1 ? "mainIconActive" : "mainIcon")
+                        }
+                        .tag(1)
+
+                    CollectionView()
+                        .tabItem {
+                            Image(selectedTab == 2 ? "colIconActive" : "colIcon")
+                        }
+                        .tag(2)
+
+                    FavoriteView()
+                        .tabItem {
+                            Image(selectedTab == 3 ? "favIconActive" : "favIcon")
+                        }
+                        .tag(3)
+                }
+                
+                VStack {
+                    HStack {
+                        NavigationLink(destination: ProfileView()) {
+                            Image(systemName: "person.circle")
+                                .font(.title)
+                                .padding()
+                                .foregroundColor(Color("ordinaryGrey"))
+                        }
+                        Spacer()
+                        Button(action: {
+                        }) {
+                            Image(systemName: "bell")
+                                .font(.title)
+                                .padding()
+                                .foregroundColor(Color("ordinaryGrey"))
+                        }
+                    }
+                    .padding(.top, 10)
+                    .padding(.horizontal)
+                    .background(Color.white.opacity(0.8))
+                    Spacer()
+                }
+            }
         }
-        
-        TabView {
-            QuestionsView()
-                .tabItem {
-                    Image(systemName: "list.bullet")
-                    Text("Обсуждения")
-                }
-            
-            CardListView()
-                .tabItem {
-                    Image(systemName: "magnifyingglass")
-                    Text("Поиск")
-                }
-            
-            CollectionView()
-                .tabItem {
-                    Image(systemName: "photo")
-                    Text("Коллекции")
-                }
-            
-            ProfileView()
-                .tabItem {
-                    Image(systemName: "person.circle")
-                    Text("Профиль")
-                }
-            
-            FavoriteView()
-                .tabItem {
-                    Image(systemName: "heart")
-                    Text("Избранное")
-                }
-        }
-        
     }
 }

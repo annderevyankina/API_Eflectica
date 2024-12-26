@@ -77,7 +77,6 @@ final class BaseURLNetworking: NetworkingLogic {
             return nil
         }
 
-        // Добавляем параметры запроса, если они есть
         let queryItems = request.parameters?.map {
             URLQueryItem(name: $0.key, value: $0.value)
         }

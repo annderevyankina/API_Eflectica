@@ -9,16 +9,15 @@ import SwiftUI
 
 struct CollectionView: View {
     var body: some View {
-        VStack {
-            Text("Your Collections")
-                .font(.title)
-                .padding()
-
-            List {
-                Text("Collection 1")
-                Text("Collection 2")
+        NavigationView {
+            VStack {
+                List {
+                    Text("Collection 1")
+                    Text("Collection 2")
+                }
+                .padding(.top, 16)
             }
+            .navigationBarTitle("Коллекции", displayMode: .inline)
         }
-        .navigationBarTitle("Коллекции", displayMode: .inline)
     }
 }

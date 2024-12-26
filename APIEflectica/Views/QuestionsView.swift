@@ -8,11 +8,15 @@
 import SwiftUI
 
 struct QuestionsView: View {
-    @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false  
+    @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false
 
     var body: some View {
-        Text("Hello, World!")
-            .padding()
-
+        NavigationView {
+            VStack {
+                Text("Hello, World!")
+                    .padding()
+            }
+            .navigationBarTitle("Вопросы", displayMode: .inline)
+        }
     }
 }

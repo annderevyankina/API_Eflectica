@@ -9,19 +9,20 @@ import SwiftUI
 
 struct ProfileView: View {
     @State private var user: UserProfile = UserProfile(
-        firstName: "John",
-        lastName: "Doe",
-        email: "john.doe@example.com",
-        avatar: UIImage(named: "avatar_placeholder")
+        firstName: "Сева",
+        lastName: "Сделал",
+        email: "sevaantonov44@mail.ru",
+        avatar: UIImage(named: "A_Avatar")
     )
     @State private var isEditing: Bool = false
     @State private var showSettings: Bool = false
     @State private var selectedImage: UIImage?
     
+    @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false
+
     var body: some View {
         NavigationView {
-            VStack {
-                // Avatar or default icon
+            VStack(spacing: 15) {
                 if let avatar = user.avatar {
                     Image(uiImage: avatar)
                         .resizable()
@@ -37,23 +38,27 @@ struct ProfileView: View {
                         .shadow(radius: 10)
                 }
                 
-                // Name and email
                 Text("\(user.firstName) \(user.lastName)")
-                    .font(.largeTitle)
-                    .padding(.top, 20)
+                    .font(.custom("BasisGrotesquePro-Regular", size: 24))
+                
+                Text("@seva_sdelal")
+                    .font(.custom("BasisGrotesquePro-Regular", size: 16))
+                    .foregroundColor(Color("ordinaryGrey"))
+                
+                Text("Почта")
+                    .font(.custom("BasisGrotesquePro-Regular", size: 16))
+                    .foregroundColor(.gray)
                 
                 Text(user.email)
-                    .font(.subheadline)
-                    .padding(.top, 5)
+                    .font(.custom("BasisGrotesquePro-Regular", size: 16))
                 
                 Spacer()
                 
-                // Edit Profile Button
                 Button(action: {
                     isEditing.toggle()
                 }) {
-                    Text("Edit Profile")
-                        .font(.headline)
+                    Text("Редактировать профиль")
+                        .font(.custom("BasisGrotesquePro-Regular", size: 16))
                         .foregroundColor(.white)
                         .padding()
                         .frame(width: 200, height: 50)
@@ -63,9 +68,20 @@ struct ProfileView: View {
                 .sheet(isPresented: $isEditing) {
                     EditProfileView(user: $user, selectedImage: $selectedImage)
                 }
+                
+                Button(action: {
+                    isLoggedIn = false
+                }) {
+                    Text("Выйти")
+                        .font(.custom("BasisGrotesquePro-Regular", size: 16))
+                        .foregroundColor(.blue)
+                        .padding()
+                        .cornerRadius(10)
+                }
+                .padding(.bottom)
             }
             .padding()
-            .navigationBarTitle("Profile", displayMode: .inline)
+            .navigationBarTitle("Профиль", displayMode: .inline)
             .navigationBarItems(trailing: Button(action: {
                 showSettings.toggle()
             }) {
@@ -81,7 +97,7 @@ struct ProfileView: View {
 struct SettingsView: View {
     var body: some View {
         Text("Settings")
-            .font(.largeTitle)
+            .font(.custom("BasisGrotesquePro-Regular", size: 24))
     }
 }
 
@@ -96,7 +112,6 @@ struct EditProfileView: View {
     var body: some View {
         NavigationView {
             Form {
-                // Avatar Section
                 Section(header: Text("Avatar")) {
                     Button(action: {
                         showImagePicker.toggle()
@@ -115,7 +130,6 @@ struct EditProfileView: View {
                     }
                 }
                 
-                // Personal Information Section
                 Section(header: Text("Personal information")) {
                     TextField("First Name", text: $firstName)
                     TextField("Last Name", text: $lastName)
@@ -123,19 +137,16 @@ struct EditProfileView: View {
                         .keyboardType(.emailAddress)
                 }
             }
-            .navigationBarTitle("Edit Profile")
+            .navigationBarTitle("Редактирование профиля", displayMode: .inline)
             .navigationBarItems(
-                leading: Button("Cancel") {
-                    // Close without saving
-                },
-                trailing: Button("Save") {
+                leading: Button("Отмена") {},
+                trailing: Button("Сохранить") {
                     user.firstName = firstName
                     user.lastName = lastName
                     user.email = email
                     if let selectedImage = selectedImage {
                         user.avatar = selectedImage
                     }
-                    // Close edit view
                 }
             )
             .onAppear {

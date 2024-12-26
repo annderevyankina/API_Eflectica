@@ -9,15 +9,21 @@ import SwiftUI
 
 @main
 struct APIEflecticaApp: App {
-    @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false  
-
+    @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false
+    
     var body: some Scene {
         WindowGroup {
-            if isLoggedIn {
-                MainTabView()
-            } else {
-                LoginView()
-            }
+            SplashScreenView()
         }
     }
+
+//    var body: some Scene {
+//        WindowGroup {
+//            if isLoggedIn {
+//                MainTabView()
+//            } else {
+//                LoginView()
+//            }
+//        }
+//    }
 }

@@ -8,84 +8,70 @@
 import Foundation
 import SwiftUI
 
-
 struct CardListView: View {
     let apiService = ApiService()
 
     @State private var cards: [Card] = []
-    @State private var showModal = false
+    @State private var modalType: ModalType? = nil
     @State private var selectedCard: Card?
     @State private var selectedTag: String = "All"
     @State private var searchText: String = ""
-    
-//    var filteredCards: [Card] {
-//        let filteredByTag = selectedTag == "All"
-//            ? cards
-//            : cards.filter { $0.tags.contains(selectedTag) }
-//        
-//        if searchText.isEmpty {
-//            return filteredByTag
-//        } else {
-//            return filteredByTag.filter {
-//                $0.title.contains(searchText) || $0.description.contains(searchText)
-//            }
-//        }
-//    }
-    
+
+    enum ModalType: Identifiable {
+        case addCard
+        case viewCard(Card)
+
+        var id: String {
+            switch self {
+            case .addCard: return "addCard"
+            case .viewCard(let card): return card.title
+            }
+        }
+    }
+
     var body: some View {
         NavigationView {
             VStack {
-//                Picker("Filter by Tag", selection: $selectedTag) {
-//                    Text("All").tag("All")
-//                    ForEach(cards.flatMap { $0.tags }, id: \.self) { tag in
-//                        Text(tag).tag(tag)
-//                    }
-//                }
-//                .pickerStyle(SegmentedPickerStyle())
-//                .padding()
-                
-                TextField("Search", text: $searchText)
+                Text("Все эффекты")
+                    .font(.headline)
+                    .multilineTextAlignment(.center)
                     .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .cornerRadius(10)
-                    .padding(.horizontal)
-                
+
                 List {
                     ForEach(cards) { card in
                         CardView(card: card)
                             .onTapGesture {
-                                selectedCard = card
-                                showModal = true
+                                modalType = .viewCard(card)
                             }
+                            .listRowSeparator(.hidden)
+                            .padding(.vertical, 2)
                     }
                     .onDelete(perform: deleteCard)
+                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 }
+                .listStyle(PlainListStyle())
+                .padding(.horizontal, 16)
             }
-            .navigationBarTitle("Cards")
-            .sheet(item: $selectedCard) { card in
-                CardDetailView(card: card)
-                    .navigationBarTitle(card.title, displayMode: .inline) 
-
-            }
-            .navigationBarItems(trailing: Button(action: {
-                showModal.toggle()
-            }) {
-                Image(systemName: "plus")
-            })
-            .sheet(isPresented: $showModal) {
-                AddCardView(cards: $cards)
+            .navigationBarTitle("", displayMode: .inline)
+            .sheet(item: $modalType) { modal in
+                switch modal {
+                case .addCard:
+                    AddCardView(cards: $cards)
+                case .viewCard(let card):
+                    CardDetailView(card: card)
+                        .navigationBarTitle(card.title, displayMode: .inline)
+                }
             }
             .task {
                 fetchEffectsFromAPI()
             }
         }
     }
-    
-    // Метод для удаления карточек
+
     private func deleteCard(at offsets: IndexSet) {
         cards.remove(atOffsets: offsets)
     }
-    
+
     private func fetchEffectsFromAPI() {
         apiService.fetchEffects(page: 1, category: nil) { result in
             switch result {
