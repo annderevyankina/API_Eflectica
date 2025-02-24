@@ -1,27 +1,27 @@
 //
-//  CardView.swift
-//  Eflectica
+//  EffectCardView.swift
+//  APIEflectica
 //
-//  Created by Анна on 01.12.2024.
+//  Created by Анна on 24.02.2025.
 //
 
 import Foundation
 import SwiftUI
 
-struct CardView: View {
-    var card: Card
+struct EffectCardView: View {
+    var effectCard: EffectCard
     var body: some View {
         VStack(alignment: .leading) {
-            Text(card.title)
+            Text(effectCard.title)
                 .font(.custom("BasisGrotesquePro-Medium", size: 20))
             
-            Text(card.description)
+            Text(effectCard.description)
                 .font(.custom("BasisGrotesquePro-Regular", size: 16))
                 .lineLimit(2)
                 .padding(.top, 5)
             
             HStack {
-                ForEach(card.tags, id: \.self) { tag in
+                ForEach(effectCard.tags, id: \.self) { tag in
                     Text(tag)
                         .font(.custom("BasisGrotesquePro-Regular", size: 14))
                         .padding(5)

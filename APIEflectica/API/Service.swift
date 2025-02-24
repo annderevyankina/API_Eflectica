@@ -125,6 +125,34 @@ final class ApiService {
         }
     }
     
+    // Функция для получения данных конкретного пользователя
+    func fetchUserData(
+        userId: Int,
+        completion: @escaping (Result<User, Error>) -> Void
+    ) {
+        let endpoint = EntityEndpoint.users(page: 1) // Параметры могут изменяться в зависимости от вашего API
+        let request = Request(endpoint: endpoint)
+        
+        worker.execute(request: request) { response in
+            switch response {
+            case .success(let serverResponse):
+                guard let data = serverResponse.data else {
+                    completion(.failure(Networking.Error.emptyData))
+                    return
+                }
+                
+                do {
+                    let user = try self.decoder.decode(User.self, from: data)
+                    completion(.success(user))
+                } catch {
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
     // Функция для получения избранных
     func fetchFavorites(
         page: Int,
@@ -181,6 +209,26 @@ final class ApiService {
             case .failure(let error):
                 completion(.failure(error))
             }
+        }
+    }
+    // Функция для создания коллекции
+    func createCollection(collection: Collection, completion: @escaping (Result<Void, Error>) -> Void) {
+        let endpoint = EntityEndpoint.createCollection
+        
+        do {
+            let jsonData = try JSONEncoder().encode(collection)
+            let request = Request(endpoint: endpoint, method: .post, body: jsonData)
+            
+            worker.execute(request: request) { response in
+                switch response {
+                case .success:
+                    completion(.success(()))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+        } catch {
+            completion(.failure(error)) // Теперь ошибка корректно передается
         }
     }
 }

@@ -10,22 +10,9 @@
 		956D37F82CFE4ECB00BD1CAA /* APIEflectica.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = APIEflectica.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		9502BF7B2D0017AB004F97B2 /* Exceptions for "APIEflectica" folder in "APIEflectica" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Views/Untitled.swift,
-			);
-			target = 956D37F72CFE4ECB00BD1CAA /* APIEflectica */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		956D37FA2CFE4ECB00BD1CAA /* APIEflectica */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				9502BF7B2D0017AB004F97B2 /* Exceptions for "APIEflectica" folder in "APIEflectica" target */,
-			);
 			path = APIEflectica;
 			sourceTree = "<group>";
 		};

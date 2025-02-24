@@ -1,25 +1,30 @@
 //
-//  CardDetailView.swift
+//  EffectCardDetailView.swift
 //  APIEflectica
 //
-//  Created by Анна on 04.12.2024.
+//  Created by Анна on 24.02.2025.
 //
 
-import Foundation
 import SwiftUI
 
-struct CardDetailView: View {
-    var card: Card
+struct EffectCardDetailView: View {
+    var effectCard: EffectCard
     @State private var navigateToCollection = false
+    
+    // Пример коллекций (можно заменить на реальные данные)
+    let exampleCollections: [CollectionCard] = [
+        CollectionCard(from: Collection(id: 1, name: "Design Resources", description: "A collection of design tools and resources", userId: 1, tagList: ["design", "tools", "resources"])),
+        CollectionCard(from: Collection(id: 2, name: "Animation Presets", description: "Presets for animation workflows", userId: 2, tagList: ["animation", "presets"]))
+    ]
 
     var body: some View {
         NavigationView {
             VStack(alignment: .leading, spacing: 20) {
-                Text(card.title)
+                Text(effectCard.title)
                     .font(.largeTitle)
                     .bold()
                 
-                Text(card.description)
+                Text(effectCard.description)
                     .font(.body)
                     .padding(.bottom, 10)
 
@@ -41,7 +46,7 @@ struct CardDetailView: View {
 
                 Spacer()
 
-                NavigationLink(destination: CollectionView(), isActive: $navigateToCollection) {
+                NavigationLink(destination: CollectionsView(), isActive: $navigateToCollection) {
                     Button(action: {
                         navigateToCollection = true
                     }) {

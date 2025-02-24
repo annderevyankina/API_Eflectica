@@ -24,6 +24,7 @@ enum EntityEndpoint: Endpoint {
     case questions(page: Int, userId: Int?)
     case effects(page: Int, category: String?)
     case collections(page: Int)
+    case createCollection // Новый эндпоинт для создания коллекции
     case favorites(page: Int, userId: Int?)
     case comments(page: Int, commentableId: Int, commentableType: String)
 
@@ -37,6 +38,8 @@ enum EntityEndpoint: Endpoint {
             return "/api/v1/effects"
         case .collections:
             return "/api/v1/collections"
+        case .createCollection:
+            return "/api/v1/collections" // Используется тот же путь, но для POST-запроса
         case .favorites:
             return "/api/v1/favorites"
         case .comments:
@@ -74,6 +77,8 @@ enum EntityEndpoint: Endpoint {
                 "commentableId": "\(commentableId)",
                 "commentableType": commentableType
             ]
+        case .createCollection:
+            return nil // Для POST-запроса параметры передаются в теле, а не в URL
         }
     }
 
