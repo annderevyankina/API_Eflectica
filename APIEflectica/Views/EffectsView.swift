@@ -10,10 +10,9 @@ struct EffectsView: View {
     @ObservedObject var userManager: UserManager
 
     @State private var selectedEffect: EffectCard?
-    @State private var selectedTags: Set<String> = [] // Выбранные теги
-    @State private var isCategoriesExpanded = false // Состояние списка категорий
+    @State private var selectedTags: Set<String> = []
+    @State private var isCategoriesExpanded = false
 
-    // Массив тегов
     private var allTags: [String] {
         var tagsSet = Set<String>()
         for effect in effectCards {
@@ -39,7 +38,6 @@ struct EffectsView: View {
                     .multilineTextAlignment(.center)
                     .padding()
 
-                // Кнопка для раскрытия списка категорий
                 Button(action: {
                     withAnimation {
                         isCategoriesExpanded.toggle()
@@ -59,7 +57,6 @@ struct EffectsView: View {
                     .padding(.horizontal, 16)
                 }
 
-                // Выпадающий список категорий с галочками
                 if isCategoriesExpanded {
                     VStack(alignment: .leading, spacing: 5) {
                         ForEach(allTags, id: \.self) { tag in
@@ -87,7 +84,6 @@ struct EffectsView: View {
                     .padding(.horizontal, 16)
                 }
 
-                // Список эффектов
                 List {
                     ForEach(filteredEffects) { effect in
                         EffectCardView(effectCard: effect)

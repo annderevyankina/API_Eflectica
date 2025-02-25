@@ -32,11 +32,11 @@ struct CollectionCardView: View {
             }
         }
         .padding()
-        .frame(maxWidth: .infinity, minHeight: 160) // Карточка на всю ширину
+        .frame(maxWidth: .infinity, minHeight: 160) 
         .background(Color.white)
         .cornerRadius(15)
         .shadow(radius: 5)
-        .padding(.horizontal) // Отступы по краям экрана
+        .padding(.horizontal)
     }
 }
 

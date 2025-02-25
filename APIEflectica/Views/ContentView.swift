@@ -17,11 +17,11 @@ struct ContentView: View {
             Text("Hello, world!")
         }
         .padding()
-        .task {
-            apiService.fetchUsers(page: 1) { user in
-                print(user)
-            }
-        }
+//        .task {
+//            apiService.fetchUsers(page: 1) { user in
+//                print(user)
+//            }
+//        }
         .task {
             apiService.fetchCollections(page: 1) { coll in
                 print(coll)

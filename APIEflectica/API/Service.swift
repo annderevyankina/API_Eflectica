@@ -98,41 +98,41 @@ final class ApiService {
     }
     
     // Функция для получения пользователей
-    func fetchUsers(
-        page: Int,
-        completion: @escaping (Result<[User], Error>) -> Void
-    ) {
-        let endpoint = EntityEndpoint.users(page: page)
-        let request = Request(endpoint: endpoint)
-        
-        worker.execute(request: request) { response in
-            switch response {
-            case .success(let serverResponse):
-                guard let data = serverResponse.data else {
-                    completion(.failure(Networking.Error.emptyData))
-                    return
-                }
-                
-                do {
-                    let users = try self.decoder.decode([User].self, from: data)
-                    completion(.success(users))
-                } catch {
-                    completion(.failure(error))
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
+//    func fetchUsers(
+//        page: Int,
+//        completion: @escaping (Result<[User], Error>) -> Void
+//    ) {
+//        let endpoint = EntityEndpoint.users(page: page)
+//        let request = Request(endpoint: endpoint)
+//        
+//        worker.execute(request: request) { response in
+//            switch response {
+//            case .success(let serverResponse):
+//                guard let data = serverResponse.data else {
+//                    completion(.failure(Networking.Error.emptyData))
+//                    return
+//                }
+//                
+//                do {
+//                    let users = try self.decoder.decode([User].self, from: data)
+//                    completion(.success(users))
+//                } catch {
+//                    completion(.failure(error))
+//                }
+//            case .failure(let error):
+//                completion(.failure(error))
+//            }
+//        }
+//    }
     
     // Функция для получения данных конкретного пользователя
     func fetchUserData(
         userId: Int,
         completion: @escaping (Result<User, Error>) -> Void
     ) {
-        let endpoint = EntityEndpoint.users(page: 1) // Параметры могут изменяться в зависимости от вашего API
+        let endpoint = EntityEndpoint.user(userId: userId)
         let request = Request(endpoint: endpoint)
-        
+
         worker.execute(request: request) { response in
             switch response {
             case .success(let serverResponse):
@@ -140,7 +140,7 @@ final class ApiService {
                     completion(.failure(Networking.Error.emptyData))
                     return
                 }
-                
+
                 do {
                     let user = try self.decoder.decode(User.self, from: data)
                     completion(.success(user))
@@ -191,7 +191,7 @@ final class ApiService {
     ) {
         let endpoint = EntityEndpoint.comments(page: page, commentableId: commentableId, commentableType: commentableType)
         let request = Request(endpoint: endpoint)
-        
+
         worker.execute(request: request) { response in
             switch response {
             case .success(let serverResponse):
@@ -201,12 +201,20 @@ final class ApiService {
                 }
                 
                 do {
-                    let comments = try self.decoder.decode([Comment].self, from: data)
+                    // Настроим декодер, чтобы корректно обработать дату
+                    let decoder = JSONDecoder()
+                    decoder.dateDecodingStrategy = .iso8601
+                    
+                    let comments = try decoder.decode([Comment].self, from: data)
+                    print("Полученные комментарии: \(comments)")
+                    
                     completion(.success(comments))
                 } catch {
+                    print("Ошибка декодирования: \(error)")
                     completion(.failure(error))
                 }
             case .failure(let error):
+                print("Ошибка запроса: \(error)")
                 completion(.failure(error))
             }
         }
@@ -228,7 +236,7 @@ final class ApiService {
                 }
             }
         } catch {
-            completion(.failure(error)) // Теперь ошибка корректно передается
+            completion(.failure(error)) 
         }
     }
 }

@@ -20,18 +20,21 @@ extension Endpoint {
 }
 
 enum EntityEndpoint: Endpoint {
-    case users(page: Int)
+//    case users(page: Int)
+    case user(userId: Int)
     case questions(page: Int, userId: Int?)
     case effects(page: Int, category: String?)
     case collections(page: Int)
-    case createCollection // Новый эндпоинт для создания коллекции
+    case createCollection 
     case favorites(page: Int, userId: Int?)
     case comments(page: Int, commentableId: Int, commentableType: String)
 
     var compositePath: String {
         switch self {
-        case .users:
-            return "/api/v1/users"
+//        case .users:
+//            return "/api/v1/users"
+        case .user(let userId):
+            return "/api/v1/users/\(userId)"
         case .questions:
             return "/api/v1/questions"
         case .effects:
@@ -39,7 +42,7 @@ enum EntityEndpoint: Endpoint {
         case .collections:
             return "/api/v1/collections"
         case .createCollection:
-            return "/api/v1/collections" // Используется тот же путь, но для POST-запроса
+            return "/api/v1/collections"
         case .favorites:
             return "/api/v1/favorites"
         case .comments:
@@ -49,8 +52,10 @@ enum EntityEndpoint: Endpoint {
 
     var parameters: [String: String]? {
         switch self {
-        case .users(let page):
-            return ["page": "\(page)"]
+//        case .users(let page):
+//            return ["page": "\(page)"]
+        case .user:
+            return nil
         case .questions(let page, let userId):
             var params = ["page": "\(page)"]
             if let userId = userId {
@@ -78,10 +83,9 @@ enum EntityEndpoint: Endpoint {
                 "commentableType": commentableType
             ]
         case .createCollection:
-            return nil // Для POST-запроса параметры передаются в теле, а не в URL
+            return nil
         }
     }
-
     var headers: [String: String] {
         return ["Content-Type": "application/json"]
     }

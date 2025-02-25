@@ -31,7 +31,7 @@ struct QuestionCardView: View {
             }
         }
         .padding()
-        .frame(maxWidth: .infinity, alignment: .leading) // Растягиваем по ширине
+        .frame(maxWidth: .infinity, alignment: .leading) 
         .background(Color.white)
         .cornerRadius(10)
         .shadow(radius: 5)

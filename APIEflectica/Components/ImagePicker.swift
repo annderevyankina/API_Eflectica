@@ -44,6 +44,5 @@ struct ImagePicker: UIViewControllerRepresentable {
         _ uiViewController: UIImagePickerController,
         context: Context
     ) {
-        // No updates needed
     }
 }

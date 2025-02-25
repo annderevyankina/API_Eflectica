@@ -59,6 +59,7 @@ struct Effect: Codable, Identifiable {
     let manual: String
     let tagList: [String]
     let programs: String
+    let comments: [Comment]?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -70,6 +71,7 @@ struct Effect: Codable, Identifiable {
         case manual
         case tagList = "tag_list"
         case programs
+        case comments
     }
 }
 
@@ -103,19 +105,17 @@ struct Collection: Codable {
     }
 }
 
-struct Comment: Codable {
-    let id: Int
+struct Comment: Codable, Identifiable {
+    var id: Int
     let body: String
-    let userId: Int
-    let commentableId: Int
-    let commentableType: String
+    let createdAt: String
+    let user: User
 
     enum CodingKeys: String, CodingKey {
         case id
         case body
-        case userId = "user_id"
-        case commentableId = "commentable_id"
-        case commentableType = "commentable_type"
+        case createdAt = "created_at"
+        case user
     }
 }
 

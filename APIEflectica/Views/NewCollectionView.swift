@@ -7,22 +7,13 @@
 
 import SwiftUI
 
-//
-//  NewCollectionView.swift
-//  APIEflectica
-//
-//  Created by Анна on 25.02.2025.
-//
-
-import SwiftUI
-
 struct NewCollectionView: View {
-    @Binding var isPresented: Bool  // Переменная для закрытия окна
+    @Binding var isPresented: Bool
     @State private var name: String = ""
     @State private var description: String = ""
     @State private var tags: String = ""
 
-    private let apiService = ApiService()  // Экземпляр API-сервиса
+    private let apiService = ApiService()
 
     var body: some View {
         NavigationView {
@@ -70,7 +61,7 @@ struct NewCollectionView: View {
             switch result {
             case .success:
                 print("Коллекция успешно создана")
-                isPresented = false  // Закрываем окно после успешного создания
+                isPresented = false
             case .failure(let error):
                 print("Ошибка при создании коллекции: \(error)")
             }

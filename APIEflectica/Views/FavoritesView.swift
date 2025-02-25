@@ -6,17 +6,17 @@
 import SwiftUI
 
 struct FavoritesView: View {
-    @ObservedObject var userManager: UserManager  // Принимаем userManager
-    @State private var shouldRestartOnboarding = false // Состояние для перезапуска онбординга
+    @ObservedObject var userManager: UserManager
+    @State private var shouldRestartOnboarding = false
 
     var body: some View {
         VStack {
             Button("Сбросить онбординг") {
                 UserDefaults.standard.removeObject(forKey: "hasSeenOnboarding")
-                shouldRestartOnboarding = true // Меняем состояние, чтобы сбросить онбординг
+                shouldRestartOnboarding = true
             }
             .fullScreenCover(isPresented: $shouldRestartOnboarding) {
-                OnboardingView() // Показываем онбординг заново
+                OnboardingView()
             }
 
             Text("Избранное")
@@ -25,7 +25,7 @@ struct FavoritesView: View {
 
             List {
                 ForEach(userManager.user.favorites) { effect in
-                    Text(effect.name) // Отображаем имя эффекта
+                    Text(effect.name) 
                 }
             }
         }

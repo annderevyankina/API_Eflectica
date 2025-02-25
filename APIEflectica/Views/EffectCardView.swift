@@ -13,16 +13,15 @@ struct EffectCardView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            // Отображение изображения
             AsyncImage(url: URL(string: effectCard.imageURL)) { image in
                 image.resizable()
                      .scaledToFill()
             } placeholder: {
-                Color.gray.opacity(0.3) // Заглушка, пока загружается картинка
+                Color.gray.opacity(0.3)
             }
-            .frame(height: 150) // Высота изображения
+            .frame(height: 150)
             .cornerRadius(10)
-            .clipped() // Обрезка изображения по краям
+            .clipped() 
             
             Text(effectCard.title)
                 .font(.custom("BasisGrotesquePro-Medium", size: 20))

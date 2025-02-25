@@ -11,18 +11,14 @@ struct MainTabView: View {
     @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false
     @State private var selectedTab = 0
 
-    // Состояния для хранения данных
     @State private var questionCards: [QuestionCard] = []
     @State private var collectionCards: [CollectionCard] = []
-    @State private var effectCards: [EffectCard] = []  // Здесь хранится список эффектов
+    @State private var effectCards: [EffectCard] = []
     
-    // Экземпляр ApiService
     private let apiService = ApiService()
 
-    // Экземпляр UserManager
     @StateObject private var userManager = UserManager()
 
-    // Загрузка данных при загрузке представления
     func loadData() {
         apiService.fetchQuestions(page: 1, userId: nil) { result in
             switch result {
@@ -46,7 +42,6 @@ struct MainTabView: View {
             switch result {
             case .success(let effects):
                 self.effectCards = effects.map { effect in
-                    // Используем инициализатор from для создания EffectCard из Effect
                     EffectCard(from: effect)
                 }
             case .failure(let error):
@@ -54,36 +49,31 @@ struct MainTabView: View {
             }
         }
 
-        // Загрузка данных пользователя с API
-        userManager.loadUserData(userId: 1) // Здесь можно использовать реальный userId
+        userManager.loadUserData(userId: 1)
     }
 
     var body: some View {
         NavigationView {
             ZStack {
                 TabView(selection: $selectedTab) {
-                    // Передаем реальные данные в QuestionsView
                     QuestionsView(questionCards: questionCards)
                         .tabItem {
                             Image(selectedTab == 0 ? "questIconActive" : "questIcon")
                         }
                         .tag(0)
 
-                    // Передаем реальные данные в EffectsView
                     EffectsView(effectCards: effectCards, userManager: userManager) // Передаем userManager
                         .tabItem {
                             Image(selectedTab == 1 ? "mainIconActive" : "mainIcon")
                         }
                         .tag(1)
 
-                    // Передаем реальные данные в CollectionsView
                     CollectionsView()
                         .tabItem {
                             Image(selectedTab == 2 ? "colIconActive" : "colIcon")
                         }
                         .tag(2)
 
-                    // Передаем userManager в FavoritesView
                     FavoritesView(userManager: userManager)
                         .tabItem {
                             Image(selectedTab == 3 ? "favIconActive" : "favIcon")
@@ -91,7 +81,7 @@ struct MainTabView: View {
                         .tag(3)
                 }
                 .onAppear {
-                    loadData() // Загружаем данные при загрузке вью
+                    loadData()
                 }
                 
                 VStack {
