@@ -3,14 +3,33 @@
 //
 // Created by Анна on 24.02.2025.
 //
-
 import SwiftUI
 
 struct EffectsView: View {
     var effectCards: [EffectCard]
-    @ObservedObject var userManager: UserManager // Добавляем userManager
-    
+    @ObservedObject var userManager: UserManager
+
     @State private var selectedEffect: EffectCard?
+    @State private var selectedTags: Set<String> = [] // Выбранные теги
+    @State private var isCategoriesExpanded = false // Состояние списка категорий
+
+    // Массив тегов
+    private var allTags: [String] {
+        var tagsSet = Set<String>()
+        for effect in effectCards {
+            for tag in effect.tags {
+                tagsSet.insert(tag)
+            }
+        }
+        return Array(tagsSet).sorted()
+    }
+
+    var filteredEffects: [EffectCard] {
+        guard !selectedTags.isEmpty else { return effectCards }
+        return effectCards.filter { effect in
+            !selectedTags.isDisjoint(with: effect.tags)
+        }
+    }
 
     var body: some View {
         NavigationView {
@@ -20,8 +39,57 @@ struct EffectsView: View {
                     .multilineTextAlignment(.center)
                     .padding()
 
+                // Кнопка для раскрытия списка категорий
+                Button(action: {
+                    withAnimation {
+                        isCategoriesExpanded.toggle()
+                    }
+                }) {
+                    HStack {
+                        Text("Категории")
+                            .font(.headline)
+                        Spacer()
+                        Image(systemName: "chevron.down")
+                            .rotationEffect(.degrees(isCategoriesExpanded ? 180 : 0))
+                            .animation(.easeInOut(duration: 0.2), value: isCategoriesExpanded)
+                    }
+                    .padding()
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(10)
+                    .padding(.horizontal, 16)
+                }
+
+                // Выпадающий список категорий с галочками
+                if isCategoriesExpanded {
+                    VStack(alignment: .leading, spacing: 5) {
+                        ForEach(allTags, id: \.self) { tag in
+                            HStack {
+                                Button(action: {
+                                    if selectedTags.contains(tag) {
+                                        selectedTags.remove(tag)
+                                    } else {
+                                        selectedTags.insert(tag)
+                                    }
+                                }) {
+                                    Image(systemName: selectedTags.contains(tag) ? "checkmark.square.fill" : "square")
+                                        .foregroundColor(.blue)
+                                }
+                                .buttonStyle(PlainButtonStyle()) // Убирает эффект нажатия
+
+                                Text(tag)
+                                    .font(.body)
+
+                                Spacer()
+                            }
+                            .padding(.vertical, 5)
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                }
+
+                // Список эффектов
                 List {
-                    ForEach(effectCards) { effect in
+                    ForEach(filteredEffects) { effect in
                         EffectCardView(effectCard: effect)
                             .onTapGesture {
                                 selectedEffect = effect
@@ -31,7 +99,6 @@ struct EffectsView: View {
                     }
                 }
                 .listStyle(PlainListStyle())
-                .padding(.horizontal, 16)
             }
             .navigationBarTitle("", displayMode: .inline)
             .sheet(item: $selectedEffect) { effect in

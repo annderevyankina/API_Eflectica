@@ -10,8 +10,20 @@ import SwiftUI
 
 struct EffectCardView: View {
     var effectCard: EffectCard
+    
     var body: some View {
         VStack(alignment: .leading) {
+            // Отображение изображения
+            AsyncImage(url: URL(string: effectCard.imageURL)) { image in
+                image.resizable()
+                     .scaledToFill()
+            } placeholder: {
+                Color.gray.opacity(0.3) // Заглушка, пока загружается картинка
+            }
+            .frame(height: 150) // Высота изображения
+            .cornerRadius(10)
+            .clipped() // Обрезка изображения по краям
+            
             Text(effectCard.title)
                 .font(.custom("BasisGrotesquePro-Medium", size: 20))
             

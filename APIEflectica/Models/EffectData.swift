@@ -12,11 +12,13 @@ struct EffectCard: Identifiable, Hashable {
     var title: String
     var description: String
     var tags: [String]
-    
+    var imageURL: String
+
     // Инициализатор для преобразования из модели Effect
     init(from effect: Effect) {
-        self.title = effect.name  // Используем название эффекта как title
+        self.title = effect.name
         self.description = effect.description
-        self.tags = effect.tagList  // Теги из Effect для карточки
+        self.tags = effect.tagList.map { $0.replacingOccurrences(of: "_", with: " ") } 
+        self.imageURL = effect.img.url
     }
 }

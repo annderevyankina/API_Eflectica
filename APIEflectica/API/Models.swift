@@ -58,6 +58,7 @@ struct Effect: Codable, Identifiable {
     let devices: String
     let manual: String
     let tagList: [String]
+    let programs: String
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -68,6 +69,7 @@ struct Effect: Codable, Identifiable {
         case devices
         case manual
         case tagList = "tag_list"
+        case programs
     }
 }
 
